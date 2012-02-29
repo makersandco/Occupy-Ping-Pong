@@ -1,18 +1,26 @@
 /*
-inspired by http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1287148367
+*
+* occupy ping pong
+*
+* sven kraeuter for
+*
+* makers & co.
+*
+* http://makersand.co
+*
+* code inspired by http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1287148367
+*
 */
 
-int calibrationTime = 30;
-
-long unsigned int lowIn;
+byte calibrationTime = 30;
 
 long unsigned int pause = 1000;
 
 byte motionCounter = 0;
 
-int pirPin = 2;    
-int ledPin = 9;
-//SETUP
+byte pirPin = 2;    
+byte ledPin = 9;
+
 void setup(){
  Serial.begin(9600);
  pinMode(pirPin, INPUT);
@@ -28,9 +36,6 @@ void setup(){
    Serial.println("SENSOR ACTIVE");
    delay(50);
  }
-
-////////////////////////////
-//LOOP
 
 void loop(){
   if(digitalRead(pirPin) == HIGH){
