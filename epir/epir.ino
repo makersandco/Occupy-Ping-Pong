@@ -1,4 +1,5 @@
 #include "WiFly.h"
+#include "Config.h"
 
 /*
 *
@@ -14,26 +15,9 @@
 *
 */
 
-// Wifi parameters
-char passphrase[] = "ENTER PASSPHRASE";
-char ssid[] = "ENTER SSID";
-
-byte calibrationTime = 15;
-
-long unsigned int pause = 1000;
-
 byte motionCounter = 0;
 
-boolean occupied = false;
-
-byte pirPin = 2;    
-byte ledPin = 9;
-
-char* USERAGENT="occupy-ping-pong/alpha";
-char* HOST="YOUR-SERVER-ADDRESS.herokuapp.com";
-char* RESOURCE="/status.json";
-
-Client client("http://YOUR-SERVER-ADDRESS.herokuapp.com", 80);
+Client client(HOST, 80);
 
 void setup(){
   //------------------------ wifly setup ----------------------------------
@@ -93,8 +77,9 @@ void loop(){
   }
   
   //-------------------- signalling led part -------------------------------------
-  
-  connectClient("GET http://YOUR-SERVER-ADDRESS.herokuapp.com/status.json HTTP/1.0\r\n");
+  char postString[255];
+  sprintf(postString, "GET http://%s/%s HTTP/1.0\r\n", HOST, RESOURCE);
+  connectClient(postString);
   
   if (client.available()) {
     // receiving status from server
