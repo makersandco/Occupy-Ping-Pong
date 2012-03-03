@@ -4,7 +4,7 @@ require 'json'
 class OppServer < Sinatra::Application
   @@occupied=0
   get '/' do
-    "<h1>Occupy Ping Pong!</h1><br/><h2>{\"occupied\": #{@@occupied}}</h2>"
+    haml :index, :locals => {:occupied => @@occupied, :indicator_class => indicator(@@occupied)}
   end
   get '/status.json' do
     "{\"occupied\": #{@@occupied}}"
@@ -14,5 +14,13 @@ class OppServer < Sinatra::Application
     data = JSON.parse request.body.read
     @@occupied = data['occupied']
     "{\"occupied\": #{@@occupied}}"
+  end
+  def indicator(state)
+    if(state == 0)
+      :vacant
+    else
+      :occupied
+    end
+        
   end
 end
