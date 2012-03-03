@@ -51,30 +51,30 @@ void setup(){
 }
 
 void loop(){
-  //------------------- ePIR sensor part ---------------------------------------
-  if(digitalRead(pirPin) == HIGH){
-    Serial.println("Continuous motion ended.");
-    motionCounter = 0;
-    //--------- send status to server
-    connectClient(generateHttpPut(HOST, RESOURCE, '0'));
-    Serial.println();
-    Serial.println("disconnecting.");
-    client.stop();
-  }
-  else if(digitalRead(pirPin) == LOW){
-    motionCounter += 1;  
-    Serial.print("Single motion detected ");
-    Serial.print(motionCounter);
-    Serial.println(" times in a row.");
-  }
-  if(motionCounter > 4){
-    Serial.println("Continuous motion detected!");
-    //--------- send status to server 
-    connectClient(generateHttpPut(HOST, RESOURCE, '1'));
-    Serial.println();
-    Serial.println("disconnecting.");
-    client.stop();
-  }
+//  //------------------- ePIR sensor part ---------------------------------------
+//  if(digitalRead(pirPin) == HIGH){
+//    Serial.println("Continuous motion ended.");
+//    motionCounter = 0;
+//    //--------- send status to server
+//    connectClient(generateHttpPut(HOST, RESOURCE, '0'));
+//    Serial.println();
+//    Serial.println("disconnecting.");
+//    client.stop();
+//  }
+//  else if(digitalRead(pirPin) == LOW){
+//    motionCounter += 1;  
+//    Serial.print("Single motion detected ");
+//    Serial.print(motionCounter);
+//    Serial.println(" times in a row.");
+//  }
+//  if(motionCounter > 4){
+//    Serial.println("Continuous motion detected!");
+//    //--------- send status to server 
+//    connectClient(generateHttpPut(HOST, RESOURCE, '1'));
+//    Serial.println();
+//    Serial.println("disconnecting.");
+//    client.stop();
+//  }
   
   //-------------------- signalling led part -------------------------------------
   char postString[255];
@@ -86,8 +86,9 @@ void loop(){
     if(client.find("\"occupied\": ")){
       char state[1];
       client.readBytes(state, 1);
+      Serial.println(state);
       if(atoi(state) == 1){
-        Serial.println("PING PONG OCCUPIED");
+        Serial.println("PING PONG OCCUPIED!");
         digitalWrite(ledPin, HIGH);
       }
       else if(atoi(state) == 0) {
@@ -117,7 +118,6 @@ char* generateHttpPut(char* host, char* resource, char occupied){
 
 void connectClient(char* http_request){
 
-  
   if (client.connect()) {
     Serial.println("connected");
     Serial.println(http_request);
